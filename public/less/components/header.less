@@ -1,0 +1,96 @@
+.c-header {
+    background-color: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 1.8em;
+    height: @header-size;
+    left: 0;
+    min-width: @body-min-width;
+    padding: @header-padding;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &:after {
+        background-image: url("@{images}/header-shadow.png");
+        background-repeat: repeat-x;
+        bottom: -5px;
+        content: "";
+        height: 5px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+    }
+}
+
+@header-line: @header-size - 2 * @header-padding;
+
+.c-header__title {
+    left: @space-sm;
+    line-height: @header-line;
+    position: absolute;
+}
+
+.c-header__items {
+    line-height: @header-line;
+    position: absolute;
+    right: @space-sm;
+}
+
+@label-size: 32px;
+
+.c-header__label {
+    display: inline-block;
+    padding-left: @label-size + 2 * @space-xs;
+    padding-right: @space-xs;
+    position: relative;
+
+    &:after {
+        background-size: cover;
+        content: "";
+        height: @label-size;
+        display: block;
+        left: @space-xs;
+        position: absolute;
+        top: (@header-size - @label-size) / 2 - @header-padding;
+        width: @label-size;
+    }
+
+    &--points:after {
+        background-image: url("@{images}/berry.png");
+    }
+
+    &--hiscore:after {
+        background-image: url("@{images}/trophy.png");
+    }
+}
+
+@button-size: @header-line;
+
+.c-header__button {
+    cursor: pointer;
+    display: inline-block;
+    height: 0;
+    width: @button-size;
+
+    &:after {
+        background-image: url("@{images}/header-icons.png");
+        bottom: 0;
+        content: "";
+        height: @button-size;
+        position: absolute;
+        top: 0;
+        width: @button-size;
+    }
+
+    &--sound:after {
+        background-position: 0 0;
+    }
+
+    &--sound.muted:after {
+        background-position: 0 -24px;
+    }
+
+    &--pause:after {
+        background-position: 0 -48px;
+    }
+}

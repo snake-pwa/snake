@@ -1,0 +1,44 @@
+.c-board {
+    .background-chessboard(15, 15);
+    background-color: rgba(255, 255, 255, 0.5);
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    top: 0;
+
+    & canvas {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .c-board {
+        width: calc(100vw ~"-" 2 * @space-sm);
+        height: calc(100vw ~"-" 2 * @space-sm);
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .c-board {
+        width: calc(100vh ~"-" @header-size + 2 * @space-sm);
+        height: calc(100vh ~"-" @header-size + 2 * @space-sm);
+    }
+}
+
+@media screen and (orientation: portrait) and (max-width: @body-min-width) {
+    .c-board {
+        width: @body-min-width - 2 * @space-sm;
+        height: @body-min-width - 2 * @space-sm;
+    }
+}
+
+@media screen and (orientation: landscape) and (max-height: @body-min-height) {
+    .c-board {
+        width: @body-min-height - (@header-size + 2 * @space-sm);
+        height: @body-min-height - (@header-size + 2 * @space-sm);
+    }
+}
