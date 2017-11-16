@@ -62,6 +62,8 @@ class App {
         this.touch.attach(this.game);
 
         this.game.emitter.on(GameEvents.GAME_OVER, () => {
+            this.sound.play(Assets.dead);
+
             Popup.open({
                 header: 'Game over',
                 html: `You did well - ${this.score.points} points.`,
@@ -73,6 +75,11 @@ class App {
 
         this.game.emitter.on(GameEvents.ADD_POINT, () => {
             this.score.addPoint();
+            this.sound.play(Assets.point);
+        });
+
+        this.game.emitter.on(GameEvents.KEY, () => {
+            this.sound.play(Assets.pop);
         });
 
         this.body.on('click', this.body.names['pauseButton'], (event: Event) => {

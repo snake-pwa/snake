@@ -8,7 +8,8 @@ import {Keys} from '../controls/Keys';
 
 export enum GameEvents {
     GAME_OVER,
-    ADD_POINT
+    ADD_POINT,
+    KEY
 }
 
 export class Game implements Renderable, Controllable {
@@ -101,10 +102,18 @@ export class Game implements Renderable, Controllable {
         let head: WormSegment;
         let tail: WormSegment;
         let index: number;
+        let isKeyEvent: boolean = false;
 
         this.worm.offset += this.worm.speed * deltaTime / 1000;
 
         if (this.worm.offset >= 1.0) {
+            head = this.worm.segments[this.worm.segments.length - 1];
+
+            // check if worm have changed the direction
+            if (head.direction !== this.worm.direction) {
+                isKeyEvent = true;
+            }
+
             head = this.worm.createNewSegment();
         }
 
@@ -139,6 +148,10 @@ export class Game implements Renderable, Controllable {
                 this.emitter.trigger(GameEvents.GAME_OVER);
                 return;
             }
+        }
+
+        if (isKeyEvent && !this.worm.dead) {
+            this.emitter.trigger(GameEvents.KEY);
         }
     }
 

@@ -12,6 +12,7 @@ var PRECACHE_URLS = [
     '/images/berry-small.png',
     '/images/berry.png',
     '/images/chess.png',
+    '/images/dead.mp3',
     '/images/header-icons.png',
     '/images/header-shadow.png',
     '/images/icons/icon-144.png',
@@ -19,6 +20,8 @@ var PRECACHE_URLS = [
     '/images/icons/icon-384.png',
     '/images/icons/icon-48.png',
     '/images/icons/icon-96.png',
+    '/images/point.mp3',
+    '/images/pop.mp3',
     '/images/snake-head.png',
     '/images/trophy.png'
     // -- endinjector --

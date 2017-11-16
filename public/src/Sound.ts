@@ -6,7 +6,7 @@ const MUTED_CLASS = 'muted';
 export class Sound {
 
     soundElement: HTMLElement;
-    mute: boolean = false;
+    mute: boolean;
 
     constructor(body: Dom) {
         this.soundElement = body.names['soundButton'];
@@ -14,10 +14,17 @@ export class Sound {
     }
 
     loadMute() {
-        this.mute = false;
+        this.mute = this.soundElement.classList.contains(MUTED_CLASS);
+
         let value: string = window.localStorage.getItem(SOUND);
         if (value !== null) {
             this.mute = (value === 'true');
+        }
+
+        if (this.mute) {
+            this.soundElement.classList.add(MUTED_CLASS);
+        } else {
+            this.soundElement.classList.remove(MUTED_CLASS);
         }
     }
 
@@ -29,6 +36,18 @@ export class Sound {
             this.soundElement.classList.add(MUTED_CLASS);
         } else {
             this.soundElement.classList.remove(MUTED_CLASS);
+        }
+    }
+
+    play(sound: HTMLAudioElement) {
+        if (this.mute) {
+            return;
+        }
+
+        if (sound.paused) {
+            sound.play();
+        } else {
+            sound.currentTime = 0;
         }
     }
 
