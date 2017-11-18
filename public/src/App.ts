@@ -6,8 +6,10 @@ import {Assets} from './Assets';
 import {KeyboardControls} from './controls/KeyboardControls';
 import {TouchControls} from './controls/TouchControls';
 import {Game, GameEvents} from './game/Game';
-import {Score} from './Score';
-import {MuteButton} from './MuteButton';
+import {Score} from './ui/Score';
+import {MuteButton} from './ui/MuteButton';
+import {GameOverPopup} from './ui/GameOverPopup';
+import {LoaderPopup} from './ui/LoaderPopup';
 
 class App {
 
@@ -66,11 +68,7 @@ class App {
                 Assets.dead.play();
             }
 
-            Popup.open({
-                header: 'Game over',
-                html: `You did well - ${this.score.points} points.`,
-                button: 'Try again'
-            })
+            GameOverPopup.open(this.score.points).result
                 .then(() => this.reset())
                 .catch(() => this.reset());
         });
@@ -97,9 +95,10 @@ class App {
 
             Popup.open({
                 header: 'Paused',
-                html: 'Game is now paused.',
-                button: 'Resume'
-            })
+                body: 'Game is now paused.',
+                button: 'Resume',
+                animation: true
+            }).result
                 .then(() => this.resume())
                 .catch(() => this.resume());
 
@@ -115,7 +114,23 @@ class App {
 let body: HTMLElement = window.document.getElementsByTagName('body')[0];
 let app: App = new App(body);
 
-Assets.loadAll().then(() => {
-    app.init();
-    app.registerServiceWorker();
-});
+let loaderPopup = LoaderPopup.open();
+
+Assets.loadAll()
+    .then(() => {
+        loaderPopup.close('done');
+        app.init();
+        app.registerServiceWorker();
+    })
+    .catch(() => {
+        loaderPopup.dismiss('error');
+        Popup.open({
+            header: 'Uh, oh!',
+            error: true,
+            body: new Dom('<h3>The game was not initialized correctly.</h3>'),
+            button: 'Reload',
+            buttonCallback: () => window.location.reload(),
+            backdrop: false,
+            animation: true
+        });
+    });

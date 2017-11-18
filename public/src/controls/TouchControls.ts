@@ -44,9 +44,6 @@ export class TouchControls extends Controls {
 
         this.onStop = (event: TouchEvent) => {
             let now = Date.now();
-            if (!this.moved && now - this.pressTime < MOUSE_BUFFER_TIME) {
-                this.triggerKey(Keys.ACTION);
-            }
             this.pressTime = 0;
         }
 

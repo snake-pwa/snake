@@ -1,4 +1,4 @@
-import {Dom} from './ui/Dom';
+import {Dom} from './Dom';
 
 const HISCORE = 'hiscore';
 

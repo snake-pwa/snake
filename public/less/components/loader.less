@@ -1,0 +1,59 @@
+@num-balls: 5;
+@bounce-height: 40px;
+
+.c-loader {
+    margin: 0 auto;
+    padding-top: @bounce-height;
+    text-align: center;
+}
+
+.c-loader__ball {
+    animation: bounce-delay 3.0s infinite cubic-bezier(.62, .28, .23, .99) both;
+    border-radius: 50%;
+    display: inline-block;
+    height: @space-sm;
+    margin-right: @space-xs;
+    position: relative;
+    width: @space-sm;
+}
+
+.generate-balls(@i) when (@i > 0) {
+    .generate-balls(@i - 1);
+
+    .c-loader__ball:nth-child(@{i}) {
+        animation-delay: -.08s * @i;
+    }
+}
+
+.generate-balls(@num-balls);
+
+@keyframes bounce-delay {
+    0% {
+        bottom: 0;
+        background-color: #000;
+    }
+    16.66% {
+        bottom: @bounce-height;
+        background-color: #888;
+    }
+    33.33% {
+        bottom: 0;
+        background-color: #222;
+    }
+    50% {
+        bottom: @bounce-height;
+        background-color: #aaa;
+    }
+    66.66% {
+        bottom: 0;
+        background-color: #444;
+    }
+    83.33% {
+        bottom: @bounce-height;
+        background-color: #ccc;
+    }
+    100% {
+        bottom: 0;
+        background-color: #666;
+    }
+}

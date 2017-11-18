@@ -13,6 +13,7 @@ var PRECACHE_URLS = [
     '/images/berry.png',
     '/images/chess.png',
     '/images/dead.mp3',
+    '/images/error.png',
     '/images/header-icons.png',
     '/images/header-shadow.png',
     '/images/icons/icon-144.png',

@@ -1,4 +1,4 @@
-import {Dom} from './ui/Dom';
+import {Dom} from './Dom';
 
 const SOUND = 'sound';
 const MUTED_CLASS = 'muted';

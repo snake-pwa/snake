@@ -4,22 +4,25 @@ import {Dom} from './Dom';
 
 interface PopupParams {
     header: string,
-    html: string,
-    button: string,
+    body: Dom | string,
+    button?: string,
+    buttonCallback?: Function,
+    backdrop?: boolean,
+    error?: boolean,
+    animation?: boolean
 }
 
 let template = `
 <div class="c-modal">
     <div class="c-modal__popup c-modal__popup--sm" data-name="popup">
-        <div class="c-modal__popup__header">
-            <h2 data-name="header"></h2>
-        </div>
+        <div class="c-modal__popup__header"><h2 data-name="header"></h2></div>
         <div class="c-modal__popup__body" data-name="message"></div>
-        <div class="c-modal__popup__footer">
-            <span class="c-modal__button" data-name="button"></span>
-        </div>
+        <div class="c-modal__popup__footer" data-name="footer"></div>
     </div>
 </div>`;
+
+const MODAL_WITH_ANIMATION_CLASS = 'c-modal--with-animation';
+const MODAL_WITH_ERROR_CLASS = 'c-modal--with-error';
 
 export class Popup {
     result: Promise<any>;
@@ -58,12 +61,26 @@ export class Popup {
         this.container.removeChild(this.element.element);
     }
 
-    static open(params: PopupParams) {
-        let element = new Dom(template);
+    static open(params: PopupParams): Popup {
+        let element: Dom = new Dom(template);
+        let dom: Dom;
+
+        if (params.animation) {
+            element.element.classList.add(MODAL_WITH_ANIMATION_CLASS);
+        }
+
+        if (params.error) {
+            element.element.classList.add(MODAL_WITH_ERROR_CLASS);
+        }
+
+        if (params.body instanceof Dom) {
+            dom = params.body;
+        } else {
+            dom = new Dom(`<p>${params.body}</p>`);
+        }
 
         Dom.setText(element.names['header'], params.header);
-        element.names['message'].innerHTML = params.html;
-        Dom.setText(element.names['button'], params.button);
+        element.names['message'].appendChild(dom.element);
 
         let popup: Popup = new Popup(element);
 
@@ -72,14 +89,25 @@ export class Popup {
             event.preventDefault();
         });
 
-        element.on('click', element.names['button'], (event: Event) => {
-            popup.close('button');
-        });
+        if (params.button) {
+            dom = new Dom(`<span class="c-modal__button">${params.button}</span>`);
+            element.names['footer'].appendChild(dom.element);
 
-        element.on('click', element.element, (event: Event) => {
-            popup.dismiss('overlay');
-        });
+            element.on('click', dom.element, (event: Event) => {
+                if (params.buttonCallback) {
+                    params.buttonCallback();
+                } else {
+                    popup.close('button');
+                }
+            });
+        }
 
-        return popup.result;
+        if (params.backdrop !== false) {
+            element.on('click', element.element, (event: Event) => {
+                popup.dismiss('overlay');
+            });
+        }
+
+        return popup;
     }
 }

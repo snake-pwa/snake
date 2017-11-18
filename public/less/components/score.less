@@ -1,0 +1,45 @@
+@score-default: 32px;
+
+.c-score {
+    display: inline-block;
+    padding-left: @score-default + 2 * @space-xs;
+    padding-right: @space-xs;
+    position: relative;
+
+    &:after {
+        background-size: cover;
+        content: "";
+        display: block;
+        height: @score-default;
+        left: @space-xs;
+        position: absolute;
+        top: (@header-size - @score-default) / 2 - @header-padding;
+        width: @score-default;
+    }
+
+    &--points:after {
+        background-image: url("@{images}/berry.png");
+    }
+
+    &--hiscore:after {
+        background-image: url("@{images}/trophy.png");
+    }
+}
+
+@score-huge: 64px;
+
+.c-score--huge {
+    margin: @space-sm;
+    font-size: 2.8em;
+    line-height: @score-huge;
+    padding-left: @score-huge + 2 * @space-sm;
+    padding-right: @space-sm;
+
+    &:after {
+        height: @score-huge;
+        left: @space-sm;
+        position: absolute;
+        top: 0;
+        width: @score-huge;
+    }
+}

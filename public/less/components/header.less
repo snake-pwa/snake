@@ -36,34 +36,6 @@
     right: @space-sm;
 }
 
-@label-size: 32px;
-
-.c-header__label {
-    display: inline-block;
-    padding-left: @label-size + 2 * @space-xs;
-    padding-right: @space-xs;
-    position: relative;
-
-    &:after {
-        background-size: cover;
-        content: "";
-        height: @label-size;
-        display: block;
-        left: @space-xs;
-        position: absolute;
-        top: (@header-size - @label-size) / 2 - @header-padding;
-        width: @label-size;
-    }
-
-    &--points:after {
-        background-image: url("@{images}/berry.png");
-    }
-
-    &--hiscore:after {
-        background-image: url("@{images}/trophy.png");
-    }
-}
-
 @button-size: @header-line;
 
 .c-header__button {
