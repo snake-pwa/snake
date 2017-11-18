@@ -7,7 +7,7 @@ import {KeyboardControls} from './controls/KeyboardControls';
 import {TouchControls} from './controls/TouchControls';
 import {Game, GameEvents} from './game/Game';
 import {Score} from './Score';
-import {Sound} from './Sound';
+import {MuteButton} from './MuteButton';
 
 class App {
 
@@ -16,14 +16,14 @@ class App {
     keyboard: KeyboardControls;
     touch: TouchControls;
     score: Score;
-    sound: Sound;
+    muteButton: MuteButton;
 
     constructor(body: HTMLElement) {
         this.body = new Dom(body);
         this.keyboard = new KeyboardControls();
         this.touch = new TouchControls();
         this.score = new Score(this.body);
-        this.sound = new Sound(this.body);
+        this.muteButton = new MuteButton(this.body);
     }
 
     reset() {
@@ -62,7 +62,9 @@ class App {
         this.touch.attach(this.game);
 
         this.game.emitter.on(GameEvents.GAME_OVER, () => {
-            this.sound.play(Assets.dead);
+            if (!this.muteButton.mute) {
+                Assets.dead.play();
+            }
 
             Popup.open({
                 header: 'Game over',
@@ -75,11 +77,15 @@ class App {
 
         this.game.emitter.on(GameEvents.ADD_POINT, () => {
             this.score.addPoint();
-            this.sound.play(Assets.point);
+            if (!this.muteButton.mute) {
+                Assets.point.play();
+            }
         });
 
         this.game.emitter.on(GameEvents.KEY, () => {
-            this.sound.play(Assets.pop);
+            if (!this.muteButton.mute) {
+                Assets.pop.play();
+            }
         });
 
         this.body.on('click', this.body.names['pauseButton'], (event: Event) => {
@@ -100,7 +106,7 @@ class App {
         });
 
         this.body.on('click', this.body.names['soundButton'], (event: Event) => {
-            this.sound.toggleMute();
+            this.muteButton.toggleMute();
         });
     }
 }

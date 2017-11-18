@@ -1,53 +1,86 @@
 import {Dom} from './ui/Dom';
 
-const SOUND = 'sound';
-const MUTED_CLASS = 'muted';
-
 export class Sound {
 
-    soundElement: HTMLElement;
-    mute: boolean;
+    static audioCtx: any;
+    audio: HTMLAudioElement;
+    buffer: Uint8Array;
+    loaded: boolean = false;
+    path: string;
 
-    constructor(body: Dom) {
-        this.soundElement = body.names['soundButton'];
-        this.loadMute();
-    }
-
-    loadMute() {
-        this.mute = this.soundElement.classList.contains(MUTED_CLASS);
-
-        let value: string = window.localStorage.getItem(SOUND);
-        if (value !== null) {
-            this.mute = (value === 'true');
+    constructor(path: string) {
+        let AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+        if (AudioCtx && !Sound.audioCtx) {
+            Sound.audioCtx = new AudioCtx();
         }
 
-        if (this.mute) {
-            this.soundElement.classList.add(MUTED_CLASS);
-        } else {
-            this.soundElement.classList.remove(MUTED_CLASS);
-        }
+        this.path = path;
     }
 
-    toggleMute() {
-        this.mute = !this.mute;
-        window.localStorage.setItem(SOUND, this.mute ? 'true' : 'false');
+    private loadAudioCtx(): Promise<Sound> {
+        return new Promise((resolve: any, reject: any) => {
+            let request: XMLHttpRequest = new XMLHttpRequest();
 
-        if (this.mute) {
-            this.soundElement.classList.add(MUTED_CLASS);
-        } else {
-            this.soundElement.classList.remove(MUTED_CLASS);
-        }
+            request.open('GET', this.path, true);
+            request.responseType = 'arraybuffer';
+
+            request.onload = () => {
+                let audioData = request.response;
+
+                Sound.audioCtx.decodeAudioData(audioData, (buffer: Uint8Array) => {
+                    this.buffer = buffer;
+                    this.loaded = true;
+                    resolve(this);
+
+                }, (error: any) => {
+                    reject(null);
+                });
+            }
+
+            request.onerror = (error: ErrorEvent) => {
+                reject(null);
+            }
+
+            request.send();
+        });
     }
 
-    play(sound: HTMLAudioElement) {
-        if (this.mute) {
+    load(): Promise<any> {
+        if (Sound.audioCtx) {
+            return this.loadAudioCtx();
+        }
+
+        return new Promise<Sound>((resolve: any, reject: any) => {
+            this.audio = new Audio(this.path);
+            this.audio.onloadeddata = () => {
+                this.loaded = true;
+                resolve(this);
+            };
+            this.audio.onerror = (error: ErrorEvent) => {
+                console.error(error);
+                reject(null);
+            }
+        });
+    }
+
+    play() {
+        if (!this.loaded) {
             return;
         }
 
-        if (sound.paused) {
-            sound.play();
-        } else {
-            sound.currentTime = 0;
+        if (Sound.audioCtx && this.buffer) {
+            let source: any = Sound.audioCtx.createBufferSource();
+            source.buffer = this.buffer;
+            source.connect(Sound.audioCtx.destination);
+            source.start(0);
+
+        } else if (this.audio) {
+            if (this.audio.paused) {
+                this.audio.play();
+            } else {
+                this.audio.currentTime = 0;
+                
+            }
         }
     }
 
