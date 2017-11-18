@@ -19,6 +19,7 @@ class App {
     touch: TouchControls;
     score: Score;
     muteButton: MuteButton;
+    beforeinstallprompt: Event;
 
     constructor(body: HTMLElement) {
         this.body = new Dom(body);
@@ -68,6 +69,11 @@ class App {
                 Assets.dead.play();
             }
 
+            if (this.beforeinstallprompt) {
+                (this.beforeinstallprompt as any).prompt();
+                this.beforeinstallprompt = undefined;
+            }
+
             GameOverPopup.open(this.score.points).result
                 .then(() => this.reset())
                 .catch(() => this.reset());
@@ -110,11 +116,17 @@ class App {
     }
 }
 
-
 let body: HTMLElement = window.document.getElementsByTagName('body')[0];
 let app: App = new App(body);
 
 let loaderPopup = LoaderPopup.open();
+
+// Save install prompt after finished first play
+window.addEventListener('beforeinstallprompt', function (event: Event) {
+    app.beforeinstallprompt = event;
+    event.preventDefault();
+    return false;
+});
 
 Assets.loadAll()
     .then(() => {

@@ -33,7 +33,7 @@ module.exports = function (grunt) {
                     compress: true,
                     plugins: [
                         new (require('less-plugin-autoprefix'))({
-                            browsers: ["last 2 versions"]
+                            browsers: ["Firefox >= 20", "Chrome >= 34", "Explorer >= 11"]
                         })
                     ]
                 },

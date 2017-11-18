@@ -20,6 +20,7 @@ var PRECACHE_URLS = [
     '/images/icons/icon-192.png',
     '/images/icons/icon-384.png',
     '/images/icons/icon-48.png',
+    '/images/icons/icon-512.png',
     '/images/icons/icon-96.png',
     '/images/point.mp3',
     '/images/pop.mp3',
