@@ -20,7 +20,7 @@ export class Worm implements Renderable {
 
     direction: Keys;
 
-    speed: number = 5.0;    // one square per second
+    speed: number = 4.0;    // one square per second
 
     offset: number = 0.0; // from 0 to 1
 

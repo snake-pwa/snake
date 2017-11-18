@@ -12,6 +12,9 @@ export enum GameEvents {
     KEY
 }
 
+const MAX_SNAKE_LENGTH = 75;
+const SNAKE_SPPEDUP = 0.05;
+
 export class Game implements Renderable, Controllable {
 
     sizeX: number;
@@ -119,7 +122,10 @@ export class Game implements Renderable, Controllable {
 
         while (this.worm.offset >= 1.0) {
             if (this.board[head.x][head.y] instanceof Berry) {
-                head.swallowing = true;
+                if (this.worm.segments.length < MAX_SNAKE_LENGTH) {
+                    head.swallowing = true;
+                    this.worm.speed += SNAKE_SPPEDUP;
+                }
                 index = this.berries.indexOf(<Berry>this.board[head.x][head.y]);
                 this.berries.splice(index, 1);
                 this.emitter.trigger(GameEvents.ADD_POINT);
