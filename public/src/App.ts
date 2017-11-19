@@ -35,9 +35,22 @@ class App {
     }
 
     pause() {
+        if (!this.game.started || this.game.worm.dead) {
+            return;
+        }
+
         this.keyboard.deattach(this.game);
         this.touch.deattach(this.game);
         this.game.pause();
+
+        Popup.open({
+            header: 'Paused',
+            body: 'Game is now paused.',
+            button: 'Resume',
+            animation: true
+        }).result
+            .then(() => this.resume())
+            .catch(() => this.resume());
     }
 
     resume() {
@@ -93,21 +106,7 @@ class App {
         });
 
         this.body.on('click', this.body.names['pauseButton'], (event: Event) => {
-            if (!this.game.started) {
-                return;
-            }
-
             this.pause();
-
-            Popup.open({
-                header: 'Paused',
-                body: 'Game is now paused.',
-                button: 'Resume',
-                animation: true
-            }).result
-                .then(() => this.resume())
-                .catch(() => this.resume());
-
         });
 
         this.body.on('click', this.body.names['soundButton'], (event: Event) => {
@@ -121,12 +120,18 @@ let app: App = new App(body);
 
 let loaderPopup = LoaderPopup.open();
 
+
 // Save install prompt after finished first play
 window.addEventListener('beforeinstallprompt', function (event: Event) {
     app.beforeinstallprompt = event;
     event.preventDefault();
     return false;
 });
+
+// Pause the game when backgrounded
+window.onblur = () => {
+    app.pause();
+};
 
 Assets.loadAll()
     .then(() => {
