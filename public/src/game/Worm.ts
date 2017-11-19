@@ -95,9 +95,13 @@ export class Worm implements Renderable {
         let dx: number = tail.x, dy: number = tail.y;
         let x: number, y: number, r: number;
 
+        r = R2 * CELL_SIZE;
+
         ctx.fillStyle = this.color;
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 2 * R * CELL_SIZE;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
 
         // tail
         if (!tail.swallowing) {
@@ -106,47 +110,37 @@ export class Worm implements Renderable {
         }
         x = (dx + R + MARGIN) * CELL_SIZE;
         y = (dy + R + MARGIN) * CELL_SIZE;
-        r = (tail.swallowing ? R2 : R) * CELL_SIZE;
 
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, 2*Math.PI);
-        ctx.fill();
+        ctx.moveTo(x, y);
 
         // body
         for (let i = 1; i < this.segments.length; i++) {
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-
-            x = (this.segments[i].x + R + MARGIN) * CELL_SIZE;
-            y = (this.segments[i].y + R + MARGIN) * CELL_SIZE;
-            r = (this.segments[i].swallowing ? R2 : R) * CELL_SIZE;
-
-            ctx.lineTo(x, y);
-            ctx.stroke();
-
-            if (this.segments[i].swallowing ||
-                this.segments[i - 1].direction !== this.segments[i].direction) {
-                ctx.beginPath();
-                ctx.arc(x, y, r, 0, 2*Math.PI);
-                ctx.fill();
+            if (this.segments[i - 1].direction !== this.segments[i].direction) {
+                x = (this.segments[i].x + R + MARGIN) * CELL_SIZE;
+                y = (this.segments[i].y + R + MARGIN) * CELL_SIZE;
+                ctx.lineTo(x, y);
             }
         }
 
         // head
         dx = this.moveX(head.x, head.direction, this.offset);
         dy = this.moveY(head.y, head.direction, this.offset);
-        ctx.beginPath();
-        ctx.moveTo(x, y);
         x = (dx + R + MARGIN) * CELL_SIZE;
         y = (dy + R + MARGIN) * CELL_SIZE;
-        r = R * CELL_SIZE;
-
         ctx.lineTo(x, y);
         ctx.stroke();
 
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, 2*Math.PI);
-        ctx.fill();
+        // Swallowing segments
+        for (let i = 0; i < this.segments.length; i++) {
+            if (this.segments[i].swallowing) {
+                x = (this.segments[i].x + R + MARGIN) * CELL_SIZE;
+                y = (this.segments[i].y + R + MARGIN) * CELL_SIZE;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
 
         // Face
         x = (dx + MARGIN) * CELL_SIZE;
