@@ -9,11 +9,6 @@ export class Sound {
     path: string;
 
     constructor(path: string) {
-        let AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
-        if (AudioCtx && !Sound.audioCtx) {
-            Sound.audioCtx = new AudioCtx();
-        }
-
         this.path = path;
     }
 
@@ -85,3 +80,36 @@ export class Sound {
     }
 
 }
+
+
+// Initialize AudioContext
+(function init() {
+    let AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+
+    // Api supported
+    if (!AudioCtx) {
+        return;
+    }
+
+    Sound.audioCtx = new AudioCtx();
+
+    // Sound is suspended, we have to unlock it
+    if (Sound.audioCtx.state !== 'suspended') {
+        return;
+    }
+
+    let body = document.body;
+    let resume = function () {
+        Sound.audioCtx.resume();
+
+        setTimeout(() => {
+            if (Sound.audioCtx.state === 'running') {
+                body.removeEventListener('touchstart', resume, false);
+                body.removeEventListener('keydown', resume, false);
+            }
+        });
+    };
+
+    body.addEventListener('touchstart', resume, false);
+    body.addEventListener('keydown', resume, false);
+}());

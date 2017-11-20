@@ -31,11 +31,11 @@
 
 .c-modal--with-animation {
     &:before {
-        animation: fade-in .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+        animation: fade-in .2s ease-out forwards;
     }
 
     .c-modal__popup {
-        animation: blow-up .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+        animation: slide-down .2s ease-out forwards;
     }
 }
 
@@ -62,7 +62,7 @@
     }
 }
 
-@keyframes blow-up {
+@keyframes slide-down {
     0% {
         transform: translateY(-60%);
     }
