@@ -13,11 +13,8 @@ module.exports = function (grunt) {
         config: config,
 
         clean: {
-            vendor: [
-                '<%= config.PUBLIC %>/assets/vendor-*'
-            ],
             client: [
-                '<%= config.PUBLIC %>/assets/<%= config.APP %>-*'
+                '<%= config.PUBLIC %>/assets/*'
             ],
             post: [
                 '<%= config.PUBLIC %>/assets/*',
@@ -39,7 +36,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     '<%= config.PUBLIC %>/assets/<%= config.APP %>.min.css':
-                        '<%= config.PUBLIC %>/less/app.less'
+                        '<%= config.ROOT %>/less/app.less'
                 }
             }
         },
@@ -91,7 +88,7 @@ module.exports = function (grunt) {
 
         eslint: {
             target: [
-                '<%= config.PUBLIC %>/src/**/*.js'
+                '<%= config.ROOT %>/src/**/*.js'
             ],
             options: {
                 configFile: 'eslint.json'
@@ -101,7 +98,7 @@ module.exports = function (grunt) {
         lintspaces: {
             src: [
                 '<%= config.PUBLIC %>/**/*.html',
-                '<%= config.PUBLIC %>/less/**/*.less'
+                '<%= config.ROOT %>/less/**/*.less'
             ],
             options: {
                 newline: true,
@@ -113,9 +110,9 @@ module.exports = function (grunt) {
         },
 
         lesslint: {
-            src: ['<%= config.PUBLIC %>/less/app.less'],
+            src: ['<%= config.ROOT %>/less/app.less'],
             options: {
-                imports: ['<%= config.PUBLIC %>/less/**/!(app).less'],
+                imports: ['<%= config.ROOT %>/less/**/!(app).less'],
                 csslint: {
                     'adjoining-classes': false,
                     'box-sizing': false,
@@ -137,7 +134,10 @@ module.exports = function (grunt) {
                 }
             },
             src: {
-                files: ['<%= config.PUBLIC %>/src/**/*.ts'],
+                files: [
+                    '<%= config.ROOT %>/src/**/*.ts',
+                    '!<%= config.ROOT %>/src/**/*.spec.ts'
+                ],
                 tasks: ['browserify:client', 'exorcise:client', 'uglify', 'clean:post'],
                 options: {
                     spawn: false
@@ -177,8 +177,8 @@ module.exports = function (grunt) {
                 },
                 files: {
                     '<%= config.PUBLIC %>/assets/<%= config.APP %>-<%= config.PACKAGE.version %>.js': [
-                        '<%= config.PUBLIC %>/src/**/*.ts',
-                        '!<%= config.PUBLIC %>/src/**/*.spec.ts'
+                        '<%= config.ROOT %>/src/**/*.ts',
+                        '!<%= config.ROOT %>/src/**/*.spec.ts'
                     ]
                 }
             }
@@ -217,10 +217,8 @@ module.exports = function (grunt) {
         zip: {
             release: {
                 router: function (filepath) {
-                    if (filepath.match(/^public\/(src|less)\//)) {
-                        return null;
-                    }
-                    return config.APP + '-' + config.PACKAGE.version + '/' + filepath;
+                    filepath = filepath.replace(/^public/, config.APP + '-' + config.PACKAGE.version);
+                    return filepath;
                 },
                 src: [
                     'public/**/*'
