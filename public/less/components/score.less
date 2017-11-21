@@ -2,16 +2,20 @@
 
 .c-score {
     display: inline-block;
-    padding-left: @score-default + 2 * @space-xs;
+    padding-left: @score-default + @space-xs;
     padding-right: @space-xs;
     position: relative;
+
+    &:last-child {
+        padding-right: 0;
+    }
 
     &:after {
         background-size: cover;
         content: "";
         display: block;
         height: @score-default;
-        left: @space-xs;
+        left: 0;
         position: absolute;
         top: (@header-size - @score-default) / 2 - @header-padding;
         width: @score-default;

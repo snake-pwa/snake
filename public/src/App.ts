@@ -35,7 +35,7 @@ class App {
     }
 
     pause() {
-        if (!this.game.started || this.game.worm.dead) {
+        if (this.game.paused || !this.game.started || this.game.worm.dead) {
             return;
         }
 
