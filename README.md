@@ -5,7 +5,7 @@ Progressive Web Application (PWA). It uses TypeScript which is transcompiled
 to ES5 and has hardly no dependencies. Application has been implemented as
 a research project.
 
-Demo: sanke-pwa.github.io
+Demo: https://snake-pwa.github.io
 
 ## Usage
 
@@ -31,7 +31,9 @@ will help you setup the project in the development mode:
 
 ### Tests
 
-To be implemented.
+You can run tests by typing:
+
+`grunt karma` or just `npm test`
 
 ## License
 

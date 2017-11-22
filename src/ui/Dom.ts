@@ -123,9 +123,7 @@ export class Dom {
             if (callback === undefined) {
                 return true;
             }
-            if (callback !== listener.callback) {
-                return false;
-            }
+            return callback === listener.callback;
         }
 
         for (let i = this.listeners.length - 1; i >= 0; i--) {

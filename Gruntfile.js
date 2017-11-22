@@ -225,6 +225,12 @@ module.exports = function (grunt) {
                 ],
                 dest: '<%= config.ROOT %>/releases/<%= config.APP %>-<%= config.PACKAGE.version %>.zip'
             }
+        },
+
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
         }
     });
 
@@ -236,6 +242,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-exorcise');
     grunt.loadNpmTasks('grunt-injector');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-lesslint');
     grunt.loadNpmTasks('grunt-lintspaces');
     grunt.loadNpmTasks('grunt-zip');
