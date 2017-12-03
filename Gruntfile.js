@@ -127,7 +127,7 @@ module.exports = function (grunt) {
 
         watch: {
             less: {
-                files: ['<%= config.PUBLIC %>/less/**/*.less'],
+                files: ['<%= config.ROOT %>/less/**/*.less'],
                 tasks: ['less:public'],
                 options: {
                     spawn: false

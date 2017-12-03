@@ -47,7 +47,7 @@ class App {
             header: 'Paused',
             body: 'Game is now paused.',
             button: 'Resume',
-            animation: true
+            classes: ['c-modal--with-animation'],
         }).result
             .then(() => this.resume())
             .catch(() => this.resume());
@@ -143,11 +143,10 @@ Assets.loadAll()
         loaderPopup.dismiss('error');
         Popup.open({
             header: 'Uh, oh!',
-            error: true,
+            classes: ['c-modal--with-animation', 'c-modal--with-error'],
             body: new Dom('<h3>The game was not initialized correctly.</h3>'),
             button: 'Reload',
             buttonCallback: () => window.location.reload(),
-            backdrop: false,
-            animation: true
+            backdrop: false
         });
     });

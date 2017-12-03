@@ -1,6 +1,6 @@
 import {Point} from './Point';
 import {Berry} from './Berry';
-import {Worm, WormSegment} from './Worm';
+import {Worm, WormSegment, WORM_COLOR_DEFAULT, WORM_COLOR_BIG} from './Worm';
 import {Renderable, Renderer} from './Renderer';
 import {Controllable} from '../controls/Controls';
 import {Emitter} from '../ui/Emitter';
@@ -12,8 +12,9 @@ export enum GameEvents {
     KEY
 }
 
-const MAX_SNAKE_LENGTH = 75;
-const SNAKE_SPPEDUP = 0.05;
+const MAX_SNAKE_LENGTH = 150;
+const SNAKE_COLOR_CHANGE = 102;
+const SNAKE_SPPEDUP = 0.04;
 
 export class Game implements Renderable, Controllable {
 
@@ -101,6 +102,23 @@ export class Game implements Renderable, Controllable {
         this.board[x][y] = berry;
     }
 
+    growWorm(head: WormSegment) {
+        let len = this.worm.segments.length;
+
+        // Don't grow above 150
+        if (len > MAX_SNAKE_LENGTH) {
+            return;
+        }
+
+        // Change worm color, when reached 100 points
+        if (len === SNAKE_COLOR_CHANGE) {
+            this.worm.color = WORM_COLOR_BIG;
+        }
+
+        head.swallowing = true;
+        this.worm.speed += SNAKE_SPPEDUP;
+    }
+
     simulate(deltaTime: number) {
         let head: WormSegment;
         let tail: WormSegment;
@@ -122,10 +140,7 @@ export class Game implements Renderable, Controllable {
 
         while (this.worm.offset >= 1.0) {
             if (this.board[head.x][head.y] instanceof Berry) {
-                if (this.worm.segments.length < MAX_SNAKE_LENGTH) {
-                    head.swallowing = true;
-                    this.worm.speed += SNAKE_SPPEDUP;
-                }
+                this.growWorm(head);
                 index = this.berries.indexOf(<Berry>this.board[head.x][head.y]);
                 this.berries.splice(index, 1);
                 this.emitter.trigger(GameEvents.ADD_POINT);

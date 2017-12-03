@@ -16,8 +16,9 @@ export class GameOverPopup {
         return Popup.open({
             header: 'Well done!',
             body: new Dom(template),
+            backdrop: false,
             button: 'Try again',
-            animation: true
+            classes: ['c-modal--with-animation']
         });
     }
 }

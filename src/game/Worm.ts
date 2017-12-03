@@ -14,6 +14,8 @@ export class WormSegment extends Point {
     }
 }
 
+export const WORM_COLOR_DEFAULT = '#4c9ed9';
+export const WORM_COLOR_BIG = '#ff5d5d';
 
 export class Worm implements Renderable {
     segments: WormSegment[];
@@ -25,8 +27,8 @@ export class Worm implements Renderable {
     offset: number = 0.0; // from 0 to 1
 
     dead: boolean = false;
-    
-    color: string = '#4c9ed9';
+
+    color: string = WORM_COLOR_DEFAULT;
 
     constructor (x: number, y: number, direction: Keys, length: number = 3) {
         this.direction = direction;

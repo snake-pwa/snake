@@ -15,8 +15,10 @@ export class LoaderPopup {
 
     static open(): Popup {
         return Popup.open({
-            header: 'Loading...',
-            body: new Dom(template)
+            header: 'Loading',
+            body: new Dom(template),
+            classes: ['c-modal--transparent'],
+            backdrop: false
         });
     }
 }

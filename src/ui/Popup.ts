@@ -8,8 +8,7 @@ interface PopupParams {
     button?: string,
     buttonCallback?: Function,
     backdrop?: boolean,
-    error?: boolean,
-    animation?: boolean
+    classes?: string[]
 }
 
 let template = `
@@ -20,9 +19,6 @@ let template = `
         <div class="c-modal__popup__footer" data-name="footer"></div>
     </div>
 </div>`;
-
-const MODAL_WITH_ANIMATION_CLASS = 'c-modal--with-animation';
-const MODAL_WITH_ERROR_CLASS = 'c-modal--with-error';
 
 export class Popup {
     result: Promise<any>;
@@ -65,12 +61,8 @@ export class Popup {
         let element: Dom = new Dom(template);
         let dom: Dom;
 
-        if (params.animation) {
-            element.element.classList.add(MODAL_WITH_ANIMATION_CLASS);
-        }
-
-        if (params.error) {
-            element.element.classList.add(MODAL_WITH_ERROR_CLASS);
+        if (params.classes) {
+            params.classes.forEach(className => element.element.classList.add(className));
         }
 
         if (params.body instanceof Dom) {
