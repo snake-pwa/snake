@@ -5,7 +5,8 @@
   "version": "0.0.2",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/grunt/bin/grunt karma"
+    "test": "grunt karma",
+    "build": "grunt"
   },
   "engines": {
     "node": ">=6"

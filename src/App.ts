@@ -129,6 +129,9 @@ window.addEventListener('beforeinstallprompt', function (event: Event) {
 });
 
 // Pause the game when backgrounded
+document.addEventListener('pause', () => app.pause(), false);
+
+// Pause user is leaving the browser
 window.onblur = () => {
     app.pause();
 };
