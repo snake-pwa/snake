@@ -25,7 +25,7 @@ export class Game implements Renderable, Controllable {
     board: Point[][];
     emitter: Emitter<GameEvents, void>;
     renderer: Renderer;
-    gameLoop: () => void;
+    gameLoop: (time: number) => void;
 
     paused: boolean = false;
     started: boolean = false;
@@ -38,11 +38,10 @@ export class Game implements Renderable, Controllable {
         this.renderer = new Renderer(sizeX, sizeY, canvas);
         this.emitter = new Emitter<GameEvents, void>();
 
-        this.gameLoop = () => {
+        this.gameLoop = (time: number) => {
             if (this.paused || !this.started || this.worm.dead) {
                 return;
             }
-            let time: number = Date.now();
             let deltaTime: number = 0;
             if (this.frameTime !== undefined) {
                 deltaTime = time - this.frameTime;
@@ -111,7 +110,7 @@ export class Game implements Renderable, Controllable {
         }
 
         // Change worm color, when reached 100 points
-        if (len === SNAKE_COLOR_CHANGE) {
+        if (len > SNAKE_COLOR_CHANGE) {
             this.worm.color = WORM_COLOR_BIG;
         }
 
@@ -183,7 +182,7 @@ export class Game implements Renderable, Controllable {
     public resume() {
         this.paused = false;
         this.frameTime = undefined;
-        this.gameLoop();
+        requestAnimationFrame(this.gameLoop);
     }
 
     render(ctx: CanvasRenderingContext2D, time: number) {
@@ -196,7 +195,7 @@ export class Game implements Renderable, Controllable {
     onKey(key: Keys) {
         if (this.started === false) {
             this.started = true;
-            this.gameLoop();
+            requestAnimationFrame(this.gameLoop);
         }
 
         let head = this.worm.segments[this.worm.segments.length - 1];
