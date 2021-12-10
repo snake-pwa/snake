@@ -2,6 +2,7 @@
     "name": "Snake",
     "short_name": "Snake",
     "description": "A simple snake game",
+    "categories": ["games"],
     "start_url": ".",
     "theme_color": "#000",
     "background_color": "#fff",
