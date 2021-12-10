@@ -38,5 +38,22 @@
             "sizes": "512x512",
             "type": "image/png"
         }
+    ],
+    "screenshots": [
+        {
+            "src": "images/screenshots/starting.png",
+            "sizes": "800x1200",
+            "type": "image/png"
+        },
+        {
+            "src": "images/screenshots/playing.png",
+            "sizes": "800x1200",
+            "type": "image/png"
+        },
+        {
+            "src": "images/screenshots/game-over.png",
+            "sizes": "800x1200",
+            "type": "image/png"
+        }
     ]
 }
